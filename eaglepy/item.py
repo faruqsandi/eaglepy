@@ -1,9 +1,9 @@
 import requests
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Union
 
 
 class Item:
-    def __init__(self, base_url):
+    def __init__(self, base_url: str):
         self.base_url = base_url
 
     def add_item_from_url(
@@ -11,24 +11,23 @@ class Item:
         url: str,
         name: str,
         website: Optional[str] = None,
-        tags: Optional[List] = None,
+        tags: Optional[List[str]] = None,
         modification_time: Optional[int] = None,
-        headers: Optional[dict] = None
-    ) -> dict:
+        headers: Optional[Dict[str, str]] = None
+    ) -> Dict[str, Union[str, int, List[str], Dict[str, str]]]:
         """
-        POST Add an image from an address to Eagle App. If you intend to add multiple items in a row, 
-        we suggest you use /api/item/addFromURLs.
+        POST add an image from a URL to Eagle App.
 
         Parameters:
-        url (str): Required, the URL of the image to be added. Supports http, https, base64.
-        name (str): Required, The name of the image to be added.
-        website (str): The Address of the source of the image.
-        tags (list): Tags for the image.
-        modification_time (int): The creation date of the image. The parameter can be used to alter the image's sorting order in Eagle.
-        headers (dict): Optional, customize the HTTP headers properties, this could be used to circumvent the security of certain websites.
+            url (str): The URL of the image to be added. Supports http, https, base64.
+            name (str): The name of the image to be added.
+            website (Optional[str]): The address of the source of the image.
+            tags (Optional[List[str]]): Tags for the image.
+            modification_time (Optional[int]): The creation date of the image.
+            headers (Optional[Dict[str, str]]): Customize the HTTP headers properties.
 
         Returns:
-        dict: The response from the server.
+            Dict[str, Union[str, int, List[str], Dict[str, str]]]: The response from the server.
         """
         api_url = f"{self.base_url}/api/item/addFromURL"
         data = {
@@ -44,25 +43,18 @@ class Item:
 
     def add_items_from_urls(
         self,
-        items: List[Dict[str, Optional[str]]],
+        items: List[Dict[str, Optional[Union[str, List[str], int]]]],
         folder_id: Optional[str] = None
-    ) -> dict:
+    ) -> Dict[str, Union[str, int, List[str], Dict[str, str]]]:
         """
-        POST Add multiple images from URLs to Eagle App.
+        POST add multiple images from URLs to Eagle App.
 
         Parameters:
-        items (list): The array object made up of multiple items. Each item should have the following structure:
-            - url (str): Required, the URL of images to be added. Supports http, https, base64.
-            - name (str): Required, The name of the images to be added.
-            - website (str): The Address of the source of images.
-            - annotation (str): The annotation for the images.
-            - tags (list): Tags for the images.
-            - modificationTime (int): The creation date of the images. The parameter can be used to alter the images' sorting order in Eagle.
-            - headers (dict): Optional, customize the HTTP headers properties, this could be used to circumvent the security of certain websites.
-        folder_id (str): If the parameter is defined, images will be added to the corresponding folder.
+            items (List[Dict[str, Optional[Union[str, List[str], int]]]]): The array object made up of multiple items.
+            folder_id (Optional[str]): If defined, images will be added to the corresponding folder.
 
         Returns:
-        dict: The response from the server.
+            Dict[str, Union[str, int, List[str], Dict[str, str]]]: The response from the server.
         """
         api_url = f"{self.base_url}/api/item/addFromURLs"
         data = {"items": items, "folderId": folder_id}
@@ -77,21 +69,20 @@ class Item:
         tags: Optional[List[str]] = None,
         annotation: Optional[str] = None,
         folder_id: Optional[str] = None
-    ) -> dict:
+    ) -> Dict[str, Union[str, int, List[str], Dict[str, str]]]:
         """
-        POST Add a local file to Eagle App. If you intend to add multiple items in a row, 
-        we suggest you use /api/item/addFromPaths.
+        POST add a local file to Eagle App.
 
         Parameters:
-        path (str): Required, the path of the local file.
-        name (str): Required, the name of the image to be added.
-        website (str): The Address of the source of the image.
-        annotation (str): The annotation for the image.
-        tags (list): Tags for the image.
-        folder_id (str): If this parameter is defined, the image will be added to the corresponding folder.
+            path (str): The path of the local file.
+            name (str): The name of the image to be added.
+            website (Optional[str]): The address of the source of the image.
+            annotation (Optional[str]): The annotation for the image.
+            tags (Optional[List[str]]): Tags for the image.
+            folder_id (Optional[str]): If defined, the image will be added to the corresponding folder.
 
         Returns:
-        dict: The response from the server.
+            Dict[str, Union[str, int, List[str], Dict[str, str]]]: The response from the server.
         """
         url = f"{self.base_url}/api/item/addFromPath"
         data = {
@@ -107,23 +98,18 @@ class Item:
 
     def add_items_from_paths(
         self,
-        items: List[Dict[str, Optional[str]]],
+        items: List[Dict[str, Optional[Union[str, List[str]]]]],
         folder_id: Optional[str] = None
-    ) -> dict:
+    ) -> Dict[str, Union[str, int, List[str], Dict[str, str]]]:
         """
-        POST Add multiple local files to Eagle App.
+        POST add multiple local files to Eagle App.
 
         Parameters:
-        items (list): The array object made up of multiple items. Each item should have the following structure:
-            - path (str): Required, the path of the local files.
-            - name (str): Required, the name of images to be added.
-            - website (str): The Address of the source of the images.
-            - annotation (str): The annotation for the images.
-            - tags (list): Tags for the images.
-        folder_id (str): If this parameter is defined, the image will be added to the corresponding folder.
+            items (List[Dict[str, Optional[Union[str, List[str]]]]]): The array object made up of multiple items.
+            folder_id (Optional[str]): If defined, the image will be added to the corresponding folder.
 
         Returns:
-        dict: The response from the server.
+            Dict[str, Union[str, int, List[str], Dict[str, str]]]: The response from the server.
         """
         api_url = f"{self.base_url}/api/item/addFromPaths"
         data = {"items": items, "folderId": folder_id}
@@ -136,18 +122,18 @@ class Item:
         name: str,
         tags: Optional[List[str]],
         base64_data: str
-    ) -> dict:
+    ) -> Dict[str, Union[str, int, List[str], Dict[str, str]]]:
         """
-        POST Save the link in the URL form to Eagle App.
+        POST save the link in the URL form to Eagle App.
 
         Parameters:
-        url (str): Required, the link of the image to be saved. Supports http, https, base64.
-        name (str): Required, the name of the image to be added.
-        base64_data (str): The thumbnail of the bookmark. Must be in base64 format.
-        tags (list): Tags for the image.
+            url (str): The link of the image to be saved. Supports http, https, base64.
+            name (str): The name of the image to be added.
+            base64_data (str): The thumbnail of the bookmark in base64 format.
+            tags (Optional[List[str]]): Tags for the image.
 
         Returns:
-        dict: The response from the server.
+            Dict[str, Union[str, int, List[str], Dict[str, str]]]: The response from the server.
         """
         api_url = f"{self.base_url}/api/item/addBookmark"
         data = {
@@ -159,30 +145,29 @@ class Item:
         response = requests.post(api_url, json=data)
         return response.json()
 
-    def get_item_info(self, item_id: str) -> dict:
+    def get_item_info(self, item_id: str) -> Dict[str, Union[str, int, List[str], Dict[str, str]]]:
         """
-        GET Get Properties of the specified file, including the file name, tags, categorizations, folders, dimensions, etc.
+        GET properties of the specified file, including the file name, tags, categorizations, folders, dimensions, etc.
 
         Parameters:
-        item_id (str): ID of the file.
+            item_id (str): ID of the file.
 
         Returns:
-        dict: The response from the server.
+            Dict[str, Union[str, int, List[str], Dict[str, str]]]: The response from the server.
         """
         url = f"{self.base_url}/api/item/info?id={item_id}"
         response = requests.get(url)
         return response.json()
 
-    def get_item_thumbnail(self, item_id: str) -> dict:
+    def get_item_thumbnail(self, item_id: str) -> Dict[str, Union[str, int, List[str], Dict[str, str]]]:
         """
-        GET Get the path of the thumbnail of the file specified. If you would like to get a batch of thumbnail paths, 
-        the combination of Library path + Object ID is recommended.
+        GET the path of the thumbnail of the specified file.
 
         Parameters:
-        item_id (str): ID of the file.
+            item_id (str): ID of the file.
 
         Returns:
-        dict: The response from the server.
+            Dict[str, Union[str, int, List[str], Dict[str, str]]]: The response from the server.
         """
         url = f"{self.base_url}/api/item/thumbnail?id={item_id}"
         response = requests.get(url)
@@ -196,20 +181,20 @@ class Item:
         name: str,
         folders: List[str],
         tags: List[str]
-    ) -> dict:
+    ) -> Dict[str, Union[str, int, List[str], Dict[str, str]]]:
         """
-        GET Get items that match the filter condition.
+        GET items that match the filter condition.
 
         Parameters:
-        order_by (str): The sorting order. Options: CREATEDATE, FILESIZE, NAME, RESOLUTION. Add a minus sign for descending order: -FILESIZE.
-        limit (int): The number of items to be displayed. The default number is 200.
-        ext (str): Filter by the extension type, e.g., jpg, png.
-        name (str): Filter by the keyword.
-        folders (list): Filter by folders. Use ',' to divide folder IDs. E.g., KAY6NTU6UYI5Q,KBJ8Z60O88VMG.
-        tags (list): Filter by tags. Use ',' to divide different tags. E.g., Design, Poster.
+            order_by (str): The sorting order. Options: CREATEDATE, FILESIZE, NAME, RESOLUTION.
+            limit (int): The number of items to be displayed. Default is 200.
+            ext (str): Filter by the extension type, e.g., jpg, png.
+            name (str): Filter by the keyword.
+            folders (List[str]): Filter by folders. Use ',' to divide folder IDs.
+            tags (List[str]): Filter by tags. Use ',' to divide different tags.
 
         Returns:
-        dict: The response from the server.
+            Dict[str, Union[str, int, List[str], Dict[str, str]]]: The response from the server.
         """
         url = f"{self.base_url}/api/item/list"
         params = {
@@ -223,48 +208,45 @@ class Item:
         response = requests.get(url, params=params)
         return response.json()
 
-    def move_items_to_trash(self, item_ids: List[str]) -> dict:
+    def move_items_to_trash(self, item_ids: List[str]) -> Dict[str, Union[str, int, List[str], Dict[str, str]]]:
         """
-        POST Move items to trash.
+        POST move items to trash.
 
         Parameters:
-        item_ids (list): Required, list of item IDs to be moved to trash.
+            item_ids (List[str]): List of item IDs to be moved to trash.
 
         Returns:
-        dict: The response from the server.
+            Dict[str, Union[str, int, List[str], Dict[str, str]]]: The response from the server.
         """
         api_url = f"{self.base_url}/api/item/moveToTrash"
         data = {"itemIds": item_ids}
         response = requests.post(api_url, json=data)
         return response.json()
 
-    def refresh_palette(self, item_id: str) -> dict:
+    def refresh_palette(self, item_id: str) -> Dict[str, Union[str, int, List[str], Dict[str, str]]]:
         """
-        POST Re-analysis the color of the file. When changes to the original file were made, 
-        you can call this function to refresh the Color Analysis.
+        POST re-analyze the color of the file.
 
         Parameters:
-        item_id (str): The item's ID.
+            item_id (str): The item's ID.
 
         Returns:
-        dict: The response from the server.
+            Dict[str, Union[str, int, List[str], Dict[str, str]]]: The response from the server.
         """
         api_url = f"{self.base_url}/api/item/refreshPalette"
         data = {"id": item_id}
         response = requests.post(api_url, json=data)
         return response.json()
 
-    def refresh_thumbnail(self, item_id: str) -> dict:
+    def refresh_thumbnail(self, item_id: str) -> Dict[str, Union[str, int, List[str], Dict[str, str]]]:
         """
-        POST Re-generate the thumbnail of the file used to display in the List. 
-        When changes to the original file were made, you can call this function to re-generate the thumbnail, 
-        the color analysis will also be made.
+        POST re-generate the thumbnail of the file.
 
         Parameters:
-        item_id (str): The item's ID.
+            item_id (str): The item's ID.
 
         Returns:
-        dict: The response from the server.
+            Dict[str, Union[str, int, List[str], Dict[str, str]]]: The response from the server.
         """
         api_url = f"{self.base_url}/api/item/refreshThumbnail"
         data = {"id": item_id}
@@ -278,23 +260,19 @@ class Item:
         annotation: Optional[str] = None,
         url: Optional[str] = None,
         star: Optional[int] = None
-    ) -> dict:
+    ) -> Dict[str, Union[str, int, List[str], Dict[str, str]]]:
         """
-        POST Modify data of specified fields of the item.
-
-        Tasks that can be done with this function:
-        - Text output from external OCR Tools can be added as tags, annotations to the image, and serve as search conditions for later use.
-        - The analysis result of the image generated by external Object Detection Tools can be added in the form of tags, and serve as a search condition.
+        POST modify data of specified fields of the item.
 
         Parameters:
-        item_id (str): Required, the ID of the item to be modified.
-        tags (list): Optional, tags.
-        annotation (str): Optional, annotations.
-        url (str): Optional, the source URL.
-        star (int): Optional, ratings.
+            item_id (str): The ID of the item to be modified.
+            tags (Optional[List[str]]): Tags.
+            annotation (Optional[str]): Annotations.
+            url (Optional[str]): The source URL.
+            star (Optional[int]): Ratings.
 
         Returns:
-        dict: The response from the server.
+            Dict[str, Union[str, int, List[str], Dict[str, str]]]: The response from the server.
         """
         api_url = f"{self.base_url}/api/item/update"
         data = {

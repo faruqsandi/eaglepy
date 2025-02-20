@@ -3,6 +3,7 @@ from .folder import Folder
 from .item import Item
 from .library import Library
 
+
 class EagleClient:
     def __init__(self, base_url):
         self.application = Application(base_url)
