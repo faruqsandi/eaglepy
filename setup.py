@@ -2,12 +2,12 @@ from setuptools import setup, find_packages
 
 setup(
     name="eaglepy",
-    version="0.1.1",
+    version="0.1.2",
     packages=find_packages(),
     description="Eagle API Wrapper for Python",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    author="Your Name",
+    author="Faruq Sandi",
     author_email="faruqsandi@gmail.com",
     url="https://github.com/faruqsandi/eaglepy",
     license="MIT",
